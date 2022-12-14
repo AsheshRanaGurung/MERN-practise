@@ -33,11 +33,18 @@ export const createPosts = async (req, res) => {
 };
 export const upDatePost = async (req, res) => {
   const { id } = req.params;
-  const body = req.body;
+  const image = req.file.path;
+  const { title, message, tags, creator } = req.body;
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(404).send("No Post of this ID");
   }
-  await PostMessage.findByIdAndUpdate(id, body);
+  await PostMessage.findByIdAndUpdate(id, {
+    title,
+    message,
+    tags,
+    creator,
+    selectedFile: image,
+  });
 
   res.status(201).json("Updated successfully");
 };
