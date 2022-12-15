@@ -1,8 +1,9 @@
 import express from "express";
-import bodyParser from "body-parser";
+import Jwt from "jsonwebtoken";
+import bcrypt from "bcryptjs";
 import cors from "cors";
 import { connectDB } from "./config/mongoose.js";
-import { router } from "./routes/posts.js";
+import { router } from "./routes/route.js";
 import fs, { createWriteStream } from "fs";
 
 const app = express();

@@ -8,9 +8,9 @@ import {
   createPosts,
   upDatePost,
   deletePost,
-} from "../controller/post.controller.js";
+} from "../../controller/post.controller.js";
 
-export const router = express.Router();
+const Postrouter = express.Router();
 
 const storagefile = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -27,7 +27,9 @@ const storagefile = multer.diskStorage({
   },
 });
 const uploadfile = multer({ storage: storagefile });
-router.get("/", getPosts);
-router.post("/add_post", uploadfile.single("selectedFile"), createPosts);
-router.patch("/update/:id", uploadfile.single("selectedFile"), upDatePost);
-router.delete("/delete/:id", deletePost);
+Postrouter.get("/", getPosts);
+Postrouter.post("/add_post", uploadfile.single("selectedFile"), createPosts);
+Postrouter.patch("/update/:id/", uploadfile.single("selectedFile"), upDatePost);
+Postrouter.delete("/delete/:id/", deletePost);
+
+export default Postrouter;
