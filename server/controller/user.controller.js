@@ -5,11 +5,14 @@ import bcrypt from "bcryptjs";
 
 export const createUser = async (req, res) => {
   const { email, password, first_name, last_name, phone_number } = req.body;
+  console.log(req.body);
   try {
-    user = await UserModel.findOne({ email });
+    let user = await UserModel.findOne({ email: email });
+    console.log(user);
     if (user) {
-      return res.status(400).json({ message: "Email already exists" });
+      return res.status(400).send({ message: "Email already exists" });
     }
+    console.log("here 1");
     const newUser = new UserModel({
       email,
       password,
@@ -17,8 +20,11 @@ export const createUser = async (req, res) => {
       last_name,
       phone_number,
     });
+
     const salt = await bcrypt.genSalt(10);
+
     newUser.password = await bcrypt.hash(password, salt);
+
     await newUser.save();
 
     const payload = {
@@ -32,11 +38,13 @@ export const createUser = async (req, res) => {
       process.env.JWT_SECRET,
       { expiresIn: "7 days" },
       (err, token) => {
+        console.log(err);
         if (err) throw err;
         res.json({ token });
       }
     );
   } catch (err) {
+    console.log(err);
     res.status(500).json({ message: err.message });
   }
 };

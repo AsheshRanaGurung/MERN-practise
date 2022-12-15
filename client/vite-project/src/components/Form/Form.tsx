@@ -14,7 +14,7 @@ const Form = ({
   updateID,
   setUpdateId,
 }: {
-  updateID: string;
+  updateID: string | null;
   setUpdateId: (data: any) => void;
 }) => {
   const [postData, setPostData] = useState<IPosts>({

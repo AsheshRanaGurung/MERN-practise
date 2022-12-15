@@ -9,6 +9,7 @@ import {
   upDatePost,
   deletePost,
 } from "../../controller/post.controller.js";
+import auth from "../middleware/Middleware.js";
 
 const Postrouter = express.Router();
 
@@ -28,8 +29,18 @@ const storagefile = multer.diskStorage({
 });
 const uploadfile = multer({ storage: storagefile });
 Postrouter.get("/", getPosts);
-Postrouter.post("/add_post", uploadfile.single("selectedFile"), createPosts);
-Postrouter.patch("/update/:id/", uploadfile.single("selectedFile"), upDatePost);
-Postrouter.delete("/delete/:id/", deletePost);
+Postrouter.post(
+  "/add_post",
+  auth,
+  uploadfile.single("selectedFile"),
+  createPosts
+);
+Postrouter.patch(
+  "/update/:id/",
+  auth,
+  uploadfile.single("selectedFile"),
+  upDatePost
+);
+Postrouter.delete("/delete/:id/", auth, deletePost);
 
 export default Postrouter;
