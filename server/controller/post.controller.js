@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import PostMessage from "../models/postMessage.js";
+import PostMessage from "../models/postModel.js";
 
 export const getPosts = async (req, res) => {
   try {
@@ -12,9 +12,7 @@ export const getPosts = async (req, res) => {
   }
 };
 export const createPosts = async (req, res) => {
-  // const image = req.filename;
-  // console.log({ image });
-  const image = req.file.path;
+  const image = req?.file?.path;
   const { title, message, tags, creator } = req.body;
   const newPost = new PostMessage({
     title,
@@ -33,7 +31,7 @@ export const createPosts = async (req, res) => {
 };
 export const upDatePost = async (req, res) => {
   const { id } = req.params;
-  const image = req.file.path;
+  const image = req.file?.path;
   const { title, message, tags, creator } = req.body;
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(404).send("No Post of this ID");

@@ -1,6 +1,7 @@
 export const api = {
-  getPosts: "/",
-  createPosts: "/add_post/",
-  updatePost: "/update/:id",
-  deletePost: "/delete/:id",
+  getPosts: "/post/",
+  createPosts: "/post/add_post",
+  updatePost: "/post/update/:id/",
+  deletePost: "/post/delete/:id/",
+  registerUser: "/login/new_user",
 };
