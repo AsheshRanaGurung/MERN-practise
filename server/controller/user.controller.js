@@ -5,14 +5,14 @@ import bcrypt from "bcryptjs";
 
 export const createUser = async (req, res) => {
   const { email, password, first_name, last_name, phone_number } = req.body;
-  console.log(req.body);
+
   try {
     let user = await UserModel.findOne({ email: email });
-    console.log(user);
+
     if (user) {
       return res.status(400).send({ message: "Email already exists" });
     }
-    console.log("here 1");
+
     const newUser = new UserModel({
       email,
       password,
@@ -51,12 +51,14 @@ export const createUser = async (req, res) => {
 
 export const LoginUser = async (req, res) => {
   const { email, password } = req.body;
+
   try {
-    let user = UserModel.findOne({ email });
+    let user = await UserModel.findOne({ email });
+
     if (!user) {
       res.status(500), json({ message: "Could not find your Email" });
     }
-    const passwordMatch = await bcrypt.compare(password, user.password);
+    const passwordMatch = bcrypt.compare(password, user.password);
     if (!passwordMatch) {
       res.status(400).json({ message: "Password did not match" });
     }
@@ -76,6 +78,6 @@ export const LoginUser = async (req, res) => {
       }
     );
   } catch (err) {
-    res.status(500), json({ message: err.message });
+    res.status(500).json({ message: err.message });
   }
 };

@@ -38,7 +38,7 @@ const useGellAllPosts = () => {
 };
 
 const sendPosts = (post: IPosts) => {
-  return httpClient.post(api.createPosts, post);
+  return httpClient.post(api.createPosts, post, { disableAuth: false });
 };
 const useCreatePost = () => {
   const queryClient = useQueryClient();
@@ -57,7 +57,8 @@ const useCreatePost = () => {
 const updatePosts = (post: IPosts) => {
   return httpClient.patch(
     api.updatePost.replace(":id", post._id as string),
-    post
+    post,
+    { disableAuth: false }
   );
 };
 
@@ -76,7 +77,9 @@ const useUpdatePosts = () => {
 };
 
 const deletePost = (id: string) => {
-  return httpClient.delete(api.deletePost.replace(":id", id));
+  return httpClient.delete(api.deletePost.replace(":id", id), {
+    disableAuth: false,
+  });
 };
 
 const useDeletePost = () => {
