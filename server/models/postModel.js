@@ -14,6 +14,17 @@ const postSchema = new mongoose.Schema({
     type: Date,
     default: new Date(),
   },
+
+  status: {
+    status: {
+      type: Boolean,
+      default: true,
+    },
+    performedBy: {
+      type: mongoose.Types.ObjectId,
+      ref: "UserModel",
+    },
+  },
 });
 const PostMessage = mongoose.model("PostMessage", postSchema);
 export default PostMessage;

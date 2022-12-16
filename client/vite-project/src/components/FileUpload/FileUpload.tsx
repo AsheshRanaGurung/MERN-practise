@@ -38,24 +38,6 @@ export function FileDrop(props: IFileDrop) {
         <input {...getInputProps()} />
         <div className="d-flex justify flex-column">
           <div className="dz-message needsclick">
-            <div className="mb-3 d-flex justify-content-center">
-              {defaultImage ? (
-                <img
-                  className="img-fluid rounded d-block"
-                  src={`http://116.202.10.98:8000/${defaultImage}`}
-                  alt="d-img"
-                />
-              ) : images.length > 0 && preview ? (
-                <img
-                  className="img-fluid rounded d-block"
-                  src={ImageUrl}
-                  alt="d-img"
-                />
-              ) : (
-                <i className="display-4 text-muted ri-upload-cloud-2-fill"></i>
-              )}
-            </div>
-
             <h4 className=" d-flex justify-content-center">{message}</h4>
           </div>
         </div>
@@ -63,60 +45,45 @@ export function FileDrop(props: IFileDrop) {
       {images?.map((item: any, fileIndex) => {
         const extn = item.name.split(".").pop();
         return (
-          <ul className="list-unstyled mb-0" id="dropzone-preview">
-            <li className="mt-2" id="dropzone-preview-list">
-              <div className="border rounded">
-                <div className="d-flex p-2">
-                  <div className="flex-shrink-0 me-3">
-                    <div className="avatar-sm bg-light rounded">
-                      <img
-                        className="img-fluid rounded d-block"
-                        src={
-                          extn === "csv"
-                            ? "/assets/csv.png"
-                            : URL.createObjectURL(item)
-                        }
-                        alt="d-img"
-                      />
-                    </div>
-                  </div>
-                  <div className="flex-grow-1">
-                    <div className="pt-1">
-                      <h5 className="fs-14 mb-1" data-dz-name>
-                        {item.name}
-                        &nbsp;
-                      </h5>
-                      <p className="fs-13 text-muted mb-0" data-dz-size>
-                        {item.size}
-                      </p>
-                      <strong
-                        className="error text-danger"
-                        data-dz-errormessage
-                      ></strong>
-                    </div>
-                  </div>
-                  <div className="flex-shrink-0 ms-3">
-                    <button
-                      type="button"
-                      data-dz-remove
-                      className="btn btn-sm btn-danger"
-                      onClick={
-                        removeFile(fileIndex)
-                        // () =>
-                        // setFiles(
-                        //   props.files.filter((item, index) => {
-                        //     return index != fileIndex;
-                        //   })
-                        // )
-                      }
-                    >
-                      Delete
-                    </button>
-                  </div>
+          <div className="border rounded">
+            <div className="d-flex p-2">
+              <div className="flex-shrink-0 me-3">
+                <div className="avatar-sm bg-light rounded">
+                  <img
+                    className="img-fluid rounded d-block"
+                    src={
+                      extn === "csv"
+                        ? "/assets/csv.png"
+                        : URL.createObjectURL(item)
+                    }
+                    style={{ width: "-webkit-fill-available" }}
+                    alt="d-img"
+                  />
                 </div>
               </div>
-            </li>
-          </ul>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <h5 className="fs-14 mb-1" data-dz-name>
+                  {item.name}
+                  &nbsp;
+                </h5>
+                <button
+                  style={{ height: "30px" }}
+                  type="button"
+                  data-dz-remove
+                  className="btn btn-sm btn-danger"
+                  onClick={removeFile(fileIndex)}
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          </div>
         );
       })}
     </section>

@@ -74,7 +74,7 @@ export const LoginUser = async (req, res) => {
       { expiresIn: "30 days" },
       (err, token) => {
         if (err) throw err;
-        res.json({ token });
+        res.json({ token, first_name: user.first_name, id: user.id });
       }
     );
   } catch (err) {

@@ -46,7 +46,8 @@ const useLoginUser = () => {
 
   return useMutation(loginUser, {
     onSuccess: (data) => {
-      localStorage.setItem("auth", JSON.stringify(data?.data.token));
+      console.log(data.data, "data");
+      localStorage.setItem("auth", JSON.stringify(data?.data));
       queryClient.invalidateQueries(api.loginUser);
       toastSuccess("Login Successfully");
     },

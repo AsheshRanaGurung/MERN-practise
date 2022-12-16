@@ -3,7 +3,10 @@ import PostMessage from "../models/postModel.js";
 
 export const getPosts = async (req, res) => {
   try {
-    const postMessages = await PostMessage.find();
+    const postMessages = await PostMessage.find().populate(
+      "status.performedBy",
+      "first_name last_name"
+    );
 
     res.status(200).send(postMessages);
     // res.send(postMessages);
@@ -13,6 +16,8 @@ export const getPosts = async (req, res) => {
 };
 export const createPosts = async (req, res) => {
   const image = req?.file?.path;
+  const user = req.user;
+
   const { title, message, tags, creator } = req.body;
   const newPost = new PostMessage({
     title,
@@ -21,6 +26,7 @@ export const createPosts = async (req, res) => {
     tags,
     creator,
     selectedFile: image,
+    "status.performedBy": user.id,
   });
   try {
     await newPost.save();

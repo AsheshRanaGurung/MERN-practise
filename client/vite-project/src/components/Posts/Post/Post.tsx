@@ -1,4 +1,3 @@
-import { useState } from "react";
 import useStyles from "./styles.js";
 import {
   Card,
@@ -12,7 +11,6 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import ThumbUpAltIcon from "@material-ui/icons/ThumbUpAlt";
 import moment from "moment";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
-import ConfirmModal from "../../ConfirmModal/ConfirmModal.js";
 import { useDeletePost } from "../../../services/post.js";
 
 const Post = ({
@@ -23,19 +21,12 @@ const Post = ({
   setUpdateId: (data: any) => void;
 }) => {
   const classes = useStyles();
-  const [deleteThisID, setDeleteThisID] = useState(null);
-  const [openForgetPasswordModal, setOpenForgetPasswordModal] = useState(false);
   const { mutate: DeletePost, isLoading: isDeleting } = useDeletePost();
   const deleteThisPost = (id: string) => {
     DeletePost(id);
   };
-  const handleOpenModal = () => {
-    setOpenForgetPasswordModal(true);
-  };
+  const loggedINUser = JSON.parse(localStorage.getItem("auth") as any)?.id;
 
-  const handleCloseModal = () => {
-    setOpenForgetPasswordModal(false);
-  };
   return (
     <>
       <Card className={classes.card}>
@@ -78,20 +69,17 @@ const Post = ({
             <ThumbUpAltIcon fontSize="small"></ThumbUpAltIcon>
             Like {post.likeCount}
           </Button>
-          <Button
-            size="small"
-            color="primary"
-            onClick={() => deleteThisPost(post._id)}
-          >
-            <DeleteIcon fontSize="small"></DeleteIcon>
-          </Button>
+          {loggedINUser == post?.status?.performedBy?._id ? (
+            <Button
+              size="small"
+              color="primary"
+              onClick={() => deleteThisPost(post._id)}
+            >
+              <DeleteIcon fontSize="small"></DeleteIcon>
+            </Button>
+          ) : null}
         </CardActions>
       </Card>
-      {/* <ConfirmModal
-        handleClose={handleCloseModal}
-        openForgetPasswordModal={openForgetPasswordModal}
-        id={deleteThisID}
-      /> */}
     </>
   );
 };

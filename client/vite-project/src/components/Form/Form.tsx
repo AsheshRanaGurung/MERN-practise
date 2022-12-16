@@ -9,6 +9,7 @@ import {
   useUpdatePosts,
 } from "../../services/post.js";
 import { FileDrop } from "../FileUpload/FileUpload.js";
+import { useNavigate } from "react-router-dom";
 
 const Form = ({
   updateID,
@@ -24,6 +25,7 @@ const Form = ({
     tags: "",
     selectedFile: [],
   });
+  const navigate = useNavigate();
   const classes = useStyles();
 
   const { data: allPosts } = useGellAllPosts();
@@ -54,36 +56,42 @@ const Form = ({
   }, [isSuccess, isUpdateSucess]);
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    let formData: any = new FormData();
-    for (let data in postData) {
-      const value = postData[data as keyof IPosts];
-      if (value instanceof Array) {
-        if (value.every((v) => v instanceof File)) {
-          value.forEach((v, index) => {
-            formData?.append(`${data}`, v);
-          });
-        }
-      } else {
-        formData?.append(
-          data,
-          value instanceof File
-            ? value
-            : value instanceof Object
-            ? JSON.stringify(value)
-            : value ?? ""
-        );
-      }
-    }
-    let executeFunc = CreatePost;
-    if (updateID) {
-      executeFunc = UpdatePost;
-      formData.append("_id", updateID);
-      executeFunc(formData);
-    } else {
-      executeFunc(formData);
-    }
+    let token = localStorage.getItem("auth");
 
-    setUpdateId(null);
+    if (!token) {
+      navigate("/login");
+    } else {
+      let formData: any = new FormData();
+      for (let data in postData) {
+        const value = postData[data as keyof IPosts];
+        if (value instanceof Array) {
+          if (value.every((v) => v instanceof File)) {
+            value.forEach((v, index) => {
+              formData?.append(`${data}`, v);
+            });
+          }
+        } else {
+          formData?.append(
+            data,
+            value instanceof File
+              ? value
+              : value instanceof Object
+              ? JSON.stringify(value)
+              : value ?? ""
+          );
+        }
+      }
+      let executeFunc = CreatePost;
+      if (updateID) {
+        executeFunc = UpdatePost;
+        formData.append("_id", updateID);
+        executeFunc(formData);
+      } else {
+        executeFunc(formData);
+      }
+
+      setUpdateId(null);
+    }
   };
   const clear = () => {
     setUpdateId(null);
