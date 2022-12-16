@@ -16,13 +16,14 @@ export const baseURL = backendURL;
 
 const baseConfig = (disableAuth?: boolean): AxiosRequestConfig<any> => {
   const token = localStorage.getItem("auth");
+  // console.log("here>>", token && JSON.parse(token).id);
   return {
     baseURL,
     timeout: THREE_MINUTES,
     headers: disableAuth
       ? {}
       : {
-          Authorization: `Bearer ${JSON.parse(token as string)}`,
+          Authorization: `Bearer ${JSON.parse(token as any)?.token}`,
         },
   };
 };

@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 
 export default function (req, res, next) {
   // Get token from header
-  // const token = req.header("x-auth-token");
+
   let token = req.header("Authorization");
   token = token?.split("Bearer ")[1] ?? null;
 

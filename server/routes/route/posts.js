@@ -28,6 +28,7 @@ const storagefile = multer.diskStorage({
   },
 });
 const uploadfile = multer({ storage: storagefile });
+
 Postrouter.get("/", getPosts);
 Postrouter.post(
   "/add_post",
