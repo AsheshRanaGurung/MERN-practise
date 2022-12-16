@@ -15,16 +15,15 @@ export const backendURL = "http://localhost:5000/api";
 export const baseURL = backendURL;
 
 const baseConfig = (disableAuth?: boolean): AxiosRequestConfig<any> => {
-  //   const token = TokenService.getToken()?.access;
+  const token = localStorage.getItem("auth");
   return {
     baseURL,
     timeout: THREE_MINUTES,
-    headers:
-      // disableAuth?
-      {},
-    //   : {
-    //       Authorization: `Bearer ${token}`
-    //     }
+    headers: disableAuth
+      ? {}
+      : {
+          Authorization: `Bearer ${JSON.parse(token as string)}`,
+        },
   };
 };
 
@@ -73,9 +72,12 @@ const httpClient = {
       ...config,
     }),
 
-  delete: <T>(url: string, config?: AxiosRequestConfig<RequestData>) =>
+  delete: <T>(
+    url: string,
+    config?: AxiosRequestConfig<RequestData> & { disableAuth?: boolean }
+  ) =>
     axios.delete<T>(url, {
-      ...baseConfig(),
+      ...baseConfig(config?.disableAuth),
       ...config,
     }),
 };

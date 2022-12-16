@@ -2,57 +2,39 @@ import React, { useState, useEffect } from "react";
 import useStyles from "./styles";
 import { TextField, Button, Typography, Paper } from "@material-ui/core";
 // import FileBase from "react-file-base64";
-import { ILogin, useRegisterUser } from "../../services/login";
-import { FileDrop } from "../FileUpload/FileUpload.js";
+import { useLoginUser, IUSerLogin } from "../../services/login";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
-  const [postData, setPostData] = useState<ILogin>({
+  const [postData, setPostData] = useState<IUSerLogin>({
     email: "",
-    first_name: "",
-    last_name: "",
-    phone_number: 0,
     password: "",
-    conf_password: "",
   });
-  const { mutate: RegisterUser, isLoading } = useRegisterUser();
+  const { mutate: LoginUser, isLoading, isSuccess } = useLoginUser();
   const classes = useStyles();
-
+  const navigate = useNavigate();
+  let token;
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    RegisterUser(postData);
+    LoginUser(postData);
   };
+  useEffect(() => {
+    if (isSuccess) {
+      navigate("/");
+      token = localStorage.getItem("auth");
+    }
+  }, [isSuccess]);
 
   return (
     <div style={{ margin: "10vh 30%" }}>
       <Paper className={classes.paper}>
         <form
+          style={{ display: "flex", justifyContent: "flex-end" }}
           autoComplete="off"
           noValidate
           className={`${classes.root} ${classes.form}`}
           onSubmit={(e) => handleSubmit(e)}
         >
-          <TextField
-            name="first_name"
-            variant="outlined"
-            label="First Name"
-            fullWidth
-            style={{ marginBottom: "10px" }}
-            value={postData.first_name}
-            onChange={(e) =>
-              setPostData({ ...postData, first_name: e.target.value })
-            }
-          />
-          <TextField
-            name="last_name"
-            variant="outlined"
-            label="last_name"
-            fullWidth
-            style={{ marginBottom: "10px" }}
-            value={postData.last_name}
-            onChange={(e) =>
-              setPostData({ ...postData, last_name: e.target.value })
-            }
-          />
           <TextField
             name="email"
             variant="outlined"
@@ -64,21 +46,7 @@ const Login = () => {
               setPostData({ ...postData, email: e.target.value })
             }
           />
-          <TextField
-            name="phone_number"
-            variant="outlined"
-            type={"number"}
-            label="Phone number"
-            fullWidth
-            style={{ marginBottom: "10px" }}
-            value={postData.phone_number}
-            onChange={(e) =>
-              setPostData({
-                ...postData,
-                phone_number: e.target.value,
-              })
-            }
-          />
+
           <TextField
             name="password"
             variant="outlined"
@@ -91,19 +59,16 @@ const Login = () => {
               setPostData({ ...postData, password: e.target.value })
             }
           />
-          <TextField
-            name="conf_password"
-            variant="outlined"
-            type={"password"}
-            label="Confirm Password"
-            fullWidth
-            style={{ marginBottom: "10px" }}
-            value={postData.conf_password}
-            onChange={(e) =>
-              setPostData({ ...postData, conf_password: e.target.value })
-            }
-          />
 
+          <Typography
+            style={{
+              margin: "10px 0",
+              cursor: "pointer",
+            }}
+            onClick={() => navigate("/register")}
+          >
+            Don't have an account?
+          </Typography>
           <Button
             className={classes.buttonSubmit}
             variant="contained"
@@ -112,7 +77,7 @@ const Login = () => {
             type="submit"
             fullWidth
           >
-            {isLoading ? "Loading..." : "Sign up"}
+            {isLoading ? "Loading..." : "Login"}
           </Button>
         </form>
       </Paper>

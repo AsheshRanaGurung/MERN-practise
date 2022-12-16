@@ -1,6 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import { pageRoutes } from "./constant.routes";
 import Home from "../Pages/Home";
+import Register from "../Login/Register";
 import Login from "../Login/Login";
 
 const routes = [
@@ -12,6 +13,10 @@ const routes = [
   {
     path: pageRoutes.login,
     element: Login,
+  },
+  {
+    path: pageRoutes.userRegister,
+    element: Register,
   },
 ];
 function MERNRoutes() {
